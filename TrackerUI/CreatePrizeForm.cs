@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrackerLibrary;
 using TrackerLibrary.Models;
-using TrackerLibrary.Interfaces;
+using TrackerLibrary.DataAccess;
+using System.Data.SqlClient;
 
 namespace TrackerUI
 {
@@ -24,14 +25,14 @@ namespace TrackerUI
         {
             if (Validation())
             {
-                PrizeModel model = new PrizeModel(placeNumberValue.Text,
+                PrizeModel model = new PrizeModel(
+                    placeNumberValue.Text,
                     placeNameValue.Text,
                     prizeAmountValue.Text,
                     prizePercentageValue.Text);
-                foreach (IDataConnection db in GlobalConfig.Connections)
-                {
-                    db.CreatePrize(model);
-                }
+
+                GlobalConfig.Connection.CreatePrize(model);
+                
                 ClearInput();
             }
             else {

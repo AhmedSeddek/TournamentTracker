@@ -101,6 +101,7 @@
             this.prizeAmountValue.Name = "prizeAmountValue";
             this.prizeAmountValue.Size = new System.Drawing.Size(158, 35);
             this.prizeAmountValue.TabIndex = 12;
+            this.prizeAmountValue.Text = "0";
             // 
             // prizePercentageLabel
             // 
@@ -118,6 +119,7 @@
             this.prizePercentageValue.Name = "prizePercentageValue";
             this.prizePercentageValue.Size = new System.Drawing.Size(158, 35);
             this.prizePercentageValue.TabIndex = 12;
+            this.prizePercentageValue.Text = "0";
             // 
             // orLabel
             // 
