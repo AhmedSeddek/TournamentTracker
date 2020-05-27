@@ -19,8 +19,8 @@ namespace TrackerLibrary
             }
             if(db == DatabaseType.TextFile)
             {
-                TextConnector txt = new TextConnector();
-                Connection = txt;
+                //TextConnector txt = new TextConnector();
+                //Connection = txt;
             }
         }
         public static string CnnVal(string connectionName)

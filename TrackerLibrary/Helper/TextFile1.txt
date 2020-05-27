@@ -1,0 +1,67 @@
+﻿
+- modify the data type of the column from INT to VARCHAR:
+
+ALTER TABLE t1 ALTER COLUMN c VARCHAR (2);
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+- Add a NOT NULL constraint to a nullable column
+	- To add the NOT NULL constraint to the column c , you must update NULL to non-null first
+		UPDATE t3
+		SET c = ''
+		WHERE
+		c IS NULL;
+	- And then add the NOT NULL constraint:
+		ALTER TABLE t3 ALTER COLUMN c VARCHAR (20) NOT NULL;
+
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+-Create a foreign key in a new table
+Using Transact-SQL
+The following example creates a table and defines a foreign key constraint on the column TempID that references the column SalesReasonID in the Sales.SalesReason table in the AdventureWorks database. The ON DELETE CASCADE and ON UPDATE CASCADE clauses are used to ensure that changes made to Sales.SalesReason table are automatically propagated to the Sales.TempSalesReason table.
+
+SQL
+
+Copy
+CREATE TABLE Sales.TempSalesReason 
+   (
+      TempID int NOT NULL, Name nvarchar(50)
+      , CONSTRAINT PK_TempSales PRIMARY KEY NONCLUSTERED (TempID)
+      , CONSTRAINT FK_TempSales_SalesReason FOREIGN KEY (TempID)
+        REFERENCES Sales.SalesReason (SalesReasonID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+   )
+;
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+Create a foreign key in an existing table
+Using Transact-SQL
+The following example creates a foreign key on the column TempID and references the column SalesReasonID in the Sales.SalesReason table in the AdventureWorks database.
+
+SQL
+
+Copy
+ALTER TABLE Sales.TempSalesReason
+   ADD CONSTRAINT FK_TempSales_SalesReason FOREIGN KEY (TempID)
+      REFERENCES Sales.SalesReason (SalesReasonID)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE
+;
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+SQL DELETE – deleting one row in a table
+The following statement deletes the employee with id 3 from the employees table:
+
+1
+2
+DELETE FROM employees
+WHERE employeeID = 3;
+SQL DELETE – deleting all rows in a table
+To remove all rows in the employees table, you just execute the following query: (not recommended and make a backup before you do this)
+
+1
+DELETE FROM employees;
