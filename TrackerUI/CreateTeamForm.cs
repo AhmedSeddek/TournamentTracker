@@ -9,23 +9,26 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrackerLibrary;
 using TrackerLibrary.Models;
+using TrackerUI.Helper;
 
 namespace TrackerUI
 {
     public partial class CreateTeamForm : Form
     {
-
+        ITeamRequester callingForm;
         private List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
         private List<PersonModel> selectedteamMembers = new List<PersonModel>();
 
-        public CreateTeamForm()
+        public CreateTeamForm(ITeamRequester caller)
         {
             InitializeComponent();
             //CreateSampleData();
+            callingForm = caller;
             WireUpLists();
         }
 
-        private void CreateSampleData() {
+        private void CreateSampleData()
+        {
             availableTeamMembers.Add(new PersonModel { FirstName = "tim", LastName = "corey" });
             availableTeamMembers.Add(new PersonModel { FirstName = "sue", LastName = "storm" });
 
@@ -33,7 +36,8 @@ namespace TrackerUI
             selectedteamMembers.Add(new PersonModel { FirstName = "peter", LastName = "schnaider" });
         }
 
-        private void WireUpLists() {
+        private void WireUpLists()
+        {
             selectTeamMemberDropDown.DataSource = null;
             selectTeamMemberDropDown.DataSource = availableTeamMembers;
             selectTeamMemberDropDown.DisplayMember = "FullName";
@@ -64,23 +68,21 @@ namespace TrackerUI
 
         private void createMemberButton_Click(object sender, EventArgs e)
         {
-            if (Validation())
-            {
-                PersonModel model = new PersonModel(
-                    firstNameValue.Text,
-                    lastNameValue.Text,
-                    emailValue.Text,
-                    cellPhoneValue.Text);
-
-                model = GlobalConfig.Connection.CreatePerson(model);
-                selectedteamMembers.Add(model);
-                WireUpLists();
-                ClearInput();
-            }
-            else
+            if (!Validation())
             {
                 MessageBox.Show("invalid input");
+                return;
             }
+            PersonModel model = new PersonModel(
+                firstNameValue.Text,
+                lastNameValue.Text,
+                emailValue.Text,
+                cellPhoneValue.Text);
+
+            model = GlobalConfig.Connection.CreatePerson(model);
+            selectedteamMembers.Add(model);
+            WireUpLists();
+            ClearInput();
         }
         private void ClearInput()
         {
@@ -93,7 +95,7 @@ namespace TrackerUI
         private bool Validation()
         {
             bool output = true;
-            
+
             if (firstNameValue.Text.Length == 0)
             {
                 output = false;
@@ -122,20 +124,20 @@ namespace TrackerUI
                 selectedteamMembers.Add(p);
                 WireUpLists();
             }
-            
+
         }
 
         private void removeSelectedMemberButon_Click(object sender, EventArgs e)
         {
-            
-                PersonModel p = (PersonModel)teamMembersListBox.SelectedItem;
+
+            PersonModel p = (PersonModel)teamMembersListBox.SelectedItem;
             if (p != null)
             {
                 selectedteamMembers.Remove(p);
                 availableTeamMembers.Add(p);
                 WireUpLists();
             }
-            
+
         }
 
         private void createTeamButton_Click(object sender, EventArgs e)
@@ -143,8 +145,14 @@ namespace TrackerUI
             TeamModel t = new TeamModel();
             t.TeamName = teamValue.Text;
             t.TeamMembers = selectedteamMembers;
-            t = GlobalConfig.Connection.CreateTeam(t);
-            //TODO - reset or close form
+            GlobalConfig.Connection.CreateTeam(t);
+            callingForm.TeamComplete(t);
+            this.Close();
+        }
+
+        private void teamMembersListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

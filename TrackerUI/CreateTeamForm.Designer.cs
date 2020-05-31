@@ -220,6 +220,7 @@
             this.teamMembersListBox.Name = "teamMembersListBox";
             this.teamMembersListBox.Size = new System.Drawing.Size(398, 662);
             this.teamMembersListBox.TabIndex = 15;
+            this.teamMembersListBox.SelectedIndexChanged += new System.EventHandler(this.teamMembersListBox_SelectedIndexChanged);
             // 
             // tournamentPlayersLabel
             // 

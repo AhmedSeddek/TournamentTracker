@@ -11,14 +11,17 @@ using TrackerLibrary;
 using TrackerLibrary.Models;
 using TrackerLibrary.DataAccess;
 using System.Data.SqlClient;
+using TrackerUI.Helper;
 
 namespace TrackerUI
 {
     public partial class CreatePrizeForm : Form
     {
-        public CreatePrizeForm()
+        IPrizeRequester callingForm;
+        public CreatePrizeForm(IPrizeRequester caller)
         {
             InitializeComponent();
+            callingForm = caller;
         }
 
         private void createPrizeButton_Click(object sender, EventArgs e)
@@ -32,8 +35,9 @@ namespace TrackerUI
                     prizePercentageValue.Text);
 
                 GlobalConfig.Connection.CreatePrize(model);
-                
+                callingForm.PrizeComplete(model);
                 ClearInput();
+                this.Close();
             }
             else {
                 MessageBox.Show("invalid input");
